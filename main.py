@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess
 import os
 import argparse
@@ -49,9 +51,10 @@ def main():
             count = (file_size + block_size - 1) // block_size
 
             for _ in range(iterations):
-                subprocess.run(f"dd if=/dev/zero of={shlex.quote(file)} bs={block_size} count={count}", shell=True) # > /dev/null 2>&1 &
-                subprocess.run(f"rm -f {shlex.quote(file)}", shel=True)
-            
+                subprocess.run(f"dd if=/dev/zero of={file} bs={block_size} count={count}", shell=True) # > /dev/null 2>&1 &
+
+            subprocess.run(f"rm -f {file}", shell=True)
+
         else:
             print(f"{file} does not exist")
 
