@@ -1,15 +1,11 @@
 import subprocess
 import os
 import argparse
-import configparser
 from pathlib import Path
 from cryptography.fernet import Fernet
 import shlex
 
 def main():
-    config = configparser.ConfigParser()
-    config.read("settings.ini") # iterations
-
     parser = argparse.ArgumentParser(description="Secure deletion program")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-r', type=str)
@@ -17,7 +13,7 @@ def main():
 
     args = parser.parse_args()
 
-    iterations = int(config["DEFAULT"]["Iterations"])
+    iterations = 6
 
     files = []
 
@@ -54,8 +50,8 @@ def main():
 
             for _ in range(iterations):
                 subprocess.run(f"dd if=/dev/zero of={shlex.quote(file)} bs={block_size} count={count}", shell=True) # > /dev/null 2>&1 &
-                print(1)
-
+                subprocess.run(f"rm -f {shlex.quote(file)}", shel=True)
+            
         else:
             print(f"{file} does not exist")
 
